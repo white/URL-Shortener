@@ -4,6 +4,9 @@ require 'base32/crockford'
 
 class LinksController < ApplicationController
 
+  # You still can do 'fwd, show, new & create' with no authentication
+  before_filter :authenticate, :only => [ :edit, :update, :destroy, :index, :easy ]
+
   # GET /links
   # GET /links.xml
   def index
@@ -90,8 +93,14 @@ class LinksController < ApplicationController
 
   # Forward Base32 URL to link
   def fwd
-    link_id = Base32::Crockford.decode(params[:id])
 
+    if !params[:id].nil? && !params[:id].empty?
+      link_id = Base32::Crockford.decode(params[:id])
+    else
+      # It will be catched by the next block now
+      link_id = -1
+    end
+    
     begin
       link = Link.find(link_id)
       redirect_to_full_url(link.url, 301)
@@ -103,6 +112,7 @@ class LinksController < ApplicationController
 
   # The easiest way to get your Url shortened
   # GET /links/easy?url=http://google.com
+  # TODO: XML, JSON output
   def easy
     url = params[:url]
 
@@ -118,6 +128,14 @@ class LinksController < ApplicationController
     end
 
     render :text => SHORT_URL + "/" + Base32::Crockford.encode(link.id)
+  end
+
+  private
+  
+  def authenticate
+    authenticate_or_request_with_http_basic do |id, password|
+      id == USER_ID && password == PASSWORD
+    end
   end
 
 end

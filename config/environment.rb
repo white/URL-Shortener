@@ -40,4 +40,6 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
 
   SHORT_URL = "http://cpg.jobs"
+  USER_ID   = "adm"
+  PASSWORD  = "zzz"
 end

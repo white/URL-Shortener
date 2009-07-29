@@ -1,0 +1,10 @@
+<p>
+  <b>Short Url:</b>
+  <%=h SHORT_URL + "/" + Base32::Crockford.encode(@link.id)%>
+  <br/>
+  <b>Url:</b>
+  <%=h @link.url %>
+</p>
+
+<%= link_to 'Edit', edit_link_path(@link) %> |
+<%= link_to 'Back', links_path %>

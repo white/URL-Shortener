@@ -39,7 +39,21 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 
+  # Will be used as domain name for URL shortener and for realm for HTTP Auth
   SHORT_URL = "http://cpg.jobs"
+
+  # HTTP Auth username and password
   USER_ID   = "adm"
   PASSWORD  = "zzz"
+
+  # The location of memcached instance.  It's not a good practice to put it on
+  # your DB server, your DBAs will hate you for that.
+  # TODO Memcache
+  # CACHE = MemCache.new('127.0.0.1')
+  
+  # How long to keep a record in cache
+  CACHE_TIMEOUT = 1.day
+
+  # URL formatting regexp
+  URL_FORMAT = URI::regexp(%w(http https))
 end

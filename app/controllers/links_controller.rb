@@ -92,10 +92,13 @@ class LinksController < ApplicationController
   end
 
   # Forward Base32 URL to link
+  # TODO Memcache
   def fwd
 
-    if !params[:id].nil? && !params[:id].empty?
-      link_id = Base32::Crockford.decode(params[:id])
+    url_id = params[:id]
+   
+    if !url_id.nil? && !url_id.empty?
+      link_id = Base32::Crockford.decode(url_id)
     else
       # It will be catched by the next block now
       link_id = -1
@@ -112,7 +115,7 @@ class LinksController < ApplicationController
 
   # The easiest way to get your Url shortened
   # GET /links/easy?url=http://google.com
-  # TODO: XML, JSON output
+  # TODO XML, JSON output
   def easy
     url = params[:url]
 
@@ -133,7 +136,7 @@ class LinksController < ApplicationController
   private
   
   def authenticate
-    authenticate_or_request_with_http_basic do |id, password|
+    authenticate_or_request_with_http_basic(SHORT_URL) do |id, password|
       id == USER_ID && password == PASSWORD
     end
   end
